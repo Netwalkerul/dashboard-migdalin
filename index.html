@@ -166,17 +166,6 @@
             <h1>Dashboard Presedinte</h1>
             <p>Rapoarte zilnice directori</p>
             
-            <div class="instructions">
-                <span class="bold-text">Cum se foloseste:</span><br>
-                Link-ul CSV este deja configurat. Apasa pe butonul de mai jos pentru a incarca datele.
-            </div>
-            
-            <input 
-                type="text" 
-                id="csvUrl" 
-                class="url-input" 
-                value="https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv"
-            >
             <button class="refresh-btn" onclick="loadData()">Incarca Date</button>
         </div>
 
@@ -240,13 +229,8 @@
         }
 
         function loadData() {
-            var url = document.getElementById('csvUrl').value.trim();
+            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv';
             
-            if (!url) {
-                showError('Introduceti un link CSV valid!');
-                return;
-            }
-
             hideError();
             document.getElementById('loading').classList.remove('hidden');
             document.getElementById('stats').classList.add('hidden');
@@ -401,5 +385,4 @@
         }
     </script>
 </body>
-
 </html>
