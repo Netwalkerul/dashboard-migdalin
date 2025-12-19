@@ -306,7 +306,7 @@ function parseDate(dateStr) {
     // Formatul din Google Forms: "12/19/2024 14:30:45"
     if (!dateStr) return null;
     
-    var parts = dateStr.split(' ')[0].split('/');
+    var parts = dateStr.split(' ')[0].replace(/\//g, '.').split('.');
     if (parts.length === 3) {
         return new Date(parts[2], parts[0] - 1, parts[1]);
     }
