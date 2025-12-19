@@ -184,7 +184,7 @@
 
         <div id="charts" class="hidden">
             <div class="chart-container">
-                <h3 class="chart-title">Vanzari pe Punct de Lucru</h3>
+                <h3 class="chart-title">Vanzari pe punct de lucru (lei)</h3>
                 <div class="chart-wrapper">
                     <canvas id="salesChart"></canvas>
                 </div>
@@ -338,11 +338,14 @@
         responsive: true, 
         maintainAspectRatio: false,
         plugins: {
+            legend: {
+                display: false
+            },
             datalabels: {
                 anchor: 'end',
                 align: 'top',
                 formatter: function(value) {
-                    return value.toLocaleString('ro-RO') + ' lei';
+                    return value.toLocaleString('ro-RO');
                 },
                 font: {
                     weight: 'bold',
