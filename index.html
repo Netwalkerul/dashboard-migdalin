@@ -189,6 +189,12 @@
                     <canvas id="salesChart"></canvas>
                 </div>
             </div>
+<div class="chart-container">
+    <h3 class="chart-title">Incasari pe punct de lucru (lei)</h3>
+    <div class="chart-wrapper">
+        <canvas id="incomeChart"></canvas>
+    </div>
+</div>
             <div class="chart-container">
                 <h3 class="chart-title">Status Probleme</h3>
                 <div class="chart-wrapper">
@@ -217,7 +223,8 @@
 
     <script>
         var salesChart = null;
-        var problemsChart = null;
+	var incomeChart = null;
+	var problemsChart = null;
 
         function showError(msg) {
             var el = document.getElementById('error');
@@ -357,7 +364,85 @@
     plugins: [ChartDataLabels]
 });
 
-            var totalProblems = 0;
+            
+// Grafic Incasari
+var incomeByLocation = {};
+var debtsByLocation = {};
+var oldDebtsByLocation = {};
+
+for (var k = 0; k < data.length; k++) {
+    var row = data[k];
+    var loc = row['Punct de lucru'] || 'Necunoscut';
+    var income = parseFloat(row['Total incasari ziua curenta (lei)']) || 0;
+    var debts = parseFloat(row['Din care, creante (lei)']) || 0;
+    var oldDebts = parseFloat(row['Din care, mai vechi de 30 zile de la scadenta']) || 0;
+    
+    incomeByLocation[loc] = (incomeByLocation[loc] || 0) + income;
+    debtsByLocation[loc] = (debtsByLocation[loc] || 0) + debts;
+    oldDebtsByLocation[loc] = (oldDebtsByLocation[loc] || 0) + oldDebts;
+}
+
+var incomeLabels = [];
+var incomeValues = [];
+var debtsValues = [];
+var oldDebtsValues = [];
+
+for (var key in incomeByLocation) {
+    incomeLabels.push(key);
+    incomeValues.push(incomeByLocation[key]);
+    debtsValues.push(debtsByLocation[key]);
+    oldDebtsValues.push(oldDebtsByLocation[key]);
+}
+
+if (incomeChart) incomeChart.destroy();
+var ctx2 = document.getElementById('incomeChart').getContext('2d');
+incomeChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: incomeLabels,
+        datasets: [
+            {
+                label: 'Incasari',
+                data: incomeValues,
+                backgroundColor: '#3b82f6'
+            },
+            {
+                label: 'Creante',
+                data: debtsValues,
+                backgroundColor: '#f59e0b'
+            },
+            {
+                label: 'Creante >30 zile',
+                data: oldDebtsValues,
+                backgroundColor: '#ef4444'
+            }
+        ]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                formatter: function(value) {
+                    return value.toLocaleString('ro-RO');
+                },
+                font: {
+                    weight: 'bold',
+                    size: 10
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
+	    var totalProblems = 0;
             var resolvedProblems = 0;
             
             for (var j = 0; j < data.length; j++) {
