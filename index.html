@@ -303,12 +303,17 @@ function getPeriodDates() {
 }
 
 function parseDate(dateStr) {
-    // Formatul din Google Forms: "12/19/2024 14:30:45"
+    // Format adaptat pentru Google Sheets: Luna/Zi/An (ex: 12/17/2025)
     if (!dateStr) return null;
     
-    var parts = dateStr.split(' ')[0].replace(/\//g, '.').split('.');
+    // Luăm doar data, fără oră, și transformăm orice punct în slash
+    var datePart = dateStr.split(' ')[0].replace(/\./g, '/');
+    var parts = datePart.split('/');
+    
     if (parts.length === 3) {
-        return new Date(parts[2], parts[1] - 1, parts[0]);
+        // parts[0] este LUNA, parts[1] este ZIUA, parts[2] este ANUL
+        // Scădem 1 din lună pentru că în JavaScript lunile încep de la 0 (Ianuarie = 0)
+        return new Date(parts[2], parts[0] - 1, parts[1]);
     }
     return null;
 }
