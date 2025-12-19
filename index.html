@@ -367,6 +367,78 @@ function loadData() {
         }
     });
 }
+function displayStats(data) {
+    const statsDiv = document.getElementById('stats');
+    let totalSales = 0;
+    let totalIncome = 0;
+    let totalVisits = 0;
+
+    data.forEach(row => {
+        totalSales += parseFloat(row['Vanzari'] || 0);
+        totalIncome += parseFloat(row['Incasari'] || 0);
+        totalVisits += parseInt(row['Vizite'] || 0);
+    });
+
+    statsDiv.innerHTML = `
+        <div class="stat-card blue">
+            <div class="stat-label">Total Vânzări</div>
+            <div class="stat-value">${totalSales.toLocaleString()} lei</div>
+        </div>
+        <div class="stat-card green">
+            <div class="stat-label">Total Încasări</div>
+            <div class="stat-value">${totalIncome.toLocaleString()} lei</div>
+        </div>
+        <div class="stat-card purple">
+            <div class="stat-label">Total Vizite</div>
+            <div class="stat-value">${totalVisits.toLocaleString()}</div>
+        </div>
+    `;
+}
+
+function displayCharts(data) {
+    const ctxSales = document.getElementById('salesChart').getContext('2d');
+    const labels = [...new Set(data.map(row => row['Punct Lucru']))];
+    
+    const salesData = labels.map(label => {
+        return data.filter(row => row['Punct Lucru'] === label)
+                   .reduce((sum, row) => sum + parseFloat(row['Vanzari'] || 0), 0);
+    });
+
+    if (salesChart) salesChart.destroy();
+    
+    salesChart = new Chart(ctxSales, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vânzări',
+                data: salesData,
+                backgroundColor: '#667eea'
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+    
+    // Notă: Va trebui să definești similar și incomeChart/problemsChart dacă dorești să apară.
+}
+
+function displayTable(data) {
+    const tbody = document.querySelector('#dataTable tbody');
+    tbody.innerHTML = '';
+    
+    data.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${row.Timestamp || ''}</td>
+            <td>${row['Punct Lucru'] || ''}</td>
+            <td class="val-blue">${row['Vanzari'] || 0} lei</td>
+            <td class="val-green">${row['Incasari'] || 0} lei</td>
+            <td>${row['Vizite'] || 0}</td>
+            <td>${row['Clienti'] || 0}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
     </script>
 </body>
 </html>
