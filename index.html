@@ -385,9 +385,9 @@ function displayStats(data) {
     let totalVisits = 0;
 
     data.forEach(row => {
-        totalSales += parseFloat(row['Vanzari'] || 0);
-        totalIncome += parseFloat(row['Incasari'] || 0);
-        totalVisits += parseInt(row['Vizite'] || 0);
+        totalSales += parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)'] || 0);
+        totalIncome += parseFloat(row['Total incasari ziua curenta (lei)'] || 0);
+        totalVisits += parseInt(row['Vizite agenti (numar)'] || 0);
     });
 
     statsDiv.innerHTML = `
@@ -412,8 +412,8 @@ function displayCharts(data) {
     
     const salesData = labels.map(label => {
         return data.filter(row => row['Punct de lucru'] === label)
-                   .reduce((sum, row) => sum + parseFloat(row['Vanzari'] || 0), 0);
-    });
+                   .reduce((sum, row) => sum + parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)'] || 0), 0);
+});
 
     if (salesChart) salesChart.destroy();
     
@@ -440,13 +440,13 @@ function displayTable(data) {
     data.forEach(row => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${row.Timestamp || ''}</td>
-            <td>${row['Punct de lucru'] || ''}</td>
-            <td class="val-blue">${row['Vanzari'] || 0} lei</td>
-            <td class="val-green">${row['Incasari'] || 0} lei</td>
-            <td>${row['Vizite'] || 0}</td>
-            <td>${row['Clienti'] || 0}</td>
-        `;
+    <td>${row.Timestamp || ''}</td>
+    <td>${row['Punct de lucru'] || ''}</td>
+    <td class="val-blue">${(parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)']) || 0).toLocaleString()} lei</td>
+    <td class="val-green">${(parseFloat(row['Total incasari ziua curenta (lei)']) || 0).toLocaleString()} lei</td>
+    <td>${row['Vizite agenti (numar)'] || 0}</td>
+    <td>${row['Clienti noi (numar)'] || 0}</td>
+`;
         tbody.appendChild(tr);
     });
 }
