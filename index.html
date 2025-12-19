@@ -164,11 +164,33 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Dashboard Presedinte</h1>
-            <p>Rapoarte zilnice directori</p>
-            
-            <button class="refresh-btn" onclick="loadData()">Incarca Date</button>
+    <h1>Dashboard Presedinte</h1>
+    <p>Rapoarte zilnice directori</p>
+    
+    <div style="margin-bottom: 15px;">
+        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Selecteaza Perioada:</label>
+        <select id="periodSelect" class="url-input" onchange="toggleCustomDates()" style="margin-bottom: 10px;">
+            <option value="current_month">Luna curenta</option>
+            <option value="previous_month">Luna anterioara</option>
+            <option value="current_year">Anul curent</option>
+            <option value="previous_year">Anul anterior</option>
+            <option value="custom">Selecteaza perioada personalizata</option>
+        </select>
+        
+        <div id="customDates" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+                <label style="display: block; font-size: 12px; margin-bottom: 5px; color: #666;">Data start:</label>
+                <input type="date" id="startDate" class="url-input" style="margin-bottom: 0;">
+            </div>
+            <div>
+                <label style="display: block; font-size: 12px; margin-bottom: 5px; color: #666;">Data sfarsit:</label>
+                <input type="date" id="endDate" class="url-input" style="margin-bottom: 0;">
+            </div>
         </div>
+    </div>
+    
+    <button class="refresh-btn" onclick="loadData()">Incarca Date</button>
+</div>
 
         <div id="loading" class="loading hidden">
             <div class="spinner"></div>
@@ -236,259 +258,115 @@
             document.getElementById('error').classList.add('hidden');
         }
 
-        function loadData() {
-            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv';
-            
-            hideError();
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('stats').classList.add('hidden');
-            document.getElementById('charts').classList.add('hidden');
-            document.getElementById('tableContainer').classList.add('hidden');
-
-            Papa.parse(url, {
-                download: true,
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    try {
-                        if (results.errors.length > 0) {
-                            throw new Error(results.errors[0].message);
-                        }
-
-                        var data = results.data.filter(function(row) {
-                            return row.Timestamp || row['Punct de lucru'];
-                        });
-
-                        if (data.length === 0) {
-                            throw new Error('Nu exista date in fisier!');
-                        }
-
-                        displayStats(data);
-                        displayCharts(data);
-                        displayTable(data);
-
-                        document.getElementById('loading').classList.add('hidden');
-                        document.getElementById('stats').classList.remove('hidden');
-                        document.getElementById('charts').classList.remove('hidden');
-                        document.getElementById('tableContainer').classList.remove('hidden');
-                    } catch (err) {
-                        document.getElementById('loading').classList.add('hidden');
-                        showError(err.message);
-                    }
-                },
-                error: function(err) {
-                    document.getElementById('loading').classList.add('hidden');
-                    showError('Eroare la incarcare: ' + err.message);
-                }
-            });
-        }
-
-        function displayStats(data) {
-            var totalSales = 0;
-            var totalIncome = 0;
-            var totalVisits = 0;
-            var totalClients = 0;
-            var totalDebts = 0;
-            var oldDebts = 0;
-
-            for (var i = 0; i < data.length; i++) {
-                var row = data[i];
-                totalSales += parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)']) || 0;
-                totalIncome += parseFloat(row['Total incasari ziua curenta (lei)']) || 0;
-                totalVisits += parseInt(row['Vizite agenti (numar)']) || 0;
-                totalClients += parseInt(row['Clienti noi (numar)']) || 0;
-                totalDebts += parseFloat(row['Din care, creante (lei)']) || 0;
-                oldDebts += parseFloat(row['Din care, mai vechi de 30 zile de la scadenta']) || 0;
-            }
-
-            var html = '';
-            html += '<div class="stat-card blue"><div class="stat-label">Vanzari Totale</div><div class="stat-value">' + totalSales.toLocaleString('ro-RO') + ' lei</div></div>';
-            html += '<div class="stat-card green"><div class="stat-label">Incasari Totale</div><div class="stat-value">' + totalIncome.toLocaleString('ro-RO') + ' lei</div></div>';
-            html += '<div class="stat-card purple"><div class="stat-label">Vizite Agenti</div><div class="stat-value">' + totalVisits + '</div></div>';
-            html += '<div class="stat-card orange"><div class="stat-label">Clienti Noi</div><div class="stat-value">' + totalClients + '</div></div>';
-            html += '<div class="stat-card red"><div class="stat-label">Total Creante</div><div class="stat-value">' + totalDebts.toLocaleString('ro-RO') + ' lei</div></div>';
-            html += '<div class="stat-card yellow"><div class="stat-label">Creante peste 30 zile</div><div class="stat-value">' + oldDebts.toLocaleString('ro-RO') + ' lei</div></div>';
-
-            document.getElementById('stats').innerHTML = html;
-        }
-
-        function displayCharts(data) {
-            var locationMap = {};
-            
-            for (var i = 0; i < data.length; i++) {
-                var row = data[i];
-                var loc = row['Punct de lucru'] || 'Necunoscut';
-                var sales = parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)']) || 0;
-                locationMap[loc] = (locationMap[loc] || 0) + sales;
-            }
-
-            var labels = [];
-            var values = [];
-            for (var key in locationMap) {
-                labels.push(key);
-                values.push(locationMap[key]);
-            }
-
-            if (salesChart) salesChart.destroy();
-            var ctx1 = document.getElementById('salesChart').getContext('2d');
-            salesChart = new Chart(ctx1, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Vanzari (lei)',
-            data: values,
-            backgroundColor: '#3b82f6'
-        }]
-    },
-    options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                formatter: function(value) {
-                    return value.toLocaleString('ro-RO');
-                },
-                font: {
-                    weight: 'bold',
-                    size: 12
-                }
-            }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
-
-            
-// Grafic Incasari
-var incomeByLocation = {};
-var debtsByLocation = {};
-var oldDebtsByLocation = {};
-
-for (var k = 0; k < data.length; k++) {
-    var row = data[k];
-    var loc = row['Punct de lucru'] || 'Necunoscut';
-    var income = parseFloat(row['Total incasari ziua curenta (lei)']) || 0;
-    var debts = parseFloat(row['Din care, creante (lei)']) || 0;
-    var oldDebts = parseFloat(row['Din care, mai vechi de 30 zile de la scadenta']) || 0;
+        function toggleCustomDates() {
+    var select = document.getElementById('periodSelect');
+    var customDiv = document.getElementById('customDates');
     
-    incomeByLocation[loc] = (incomeByLocation[loc] || 0) + income;
-    debtsByLocation[loc] = (debtsByLocation[loc] || 0) + debts;
-    oldDebtsByLocation[loc] = (oldDebtsByLocation[loc] || 0) + oldDebts;
+    if (select.value === 'custom') {
+        customDiv.classList.remove('hidden');
+    } else {
+        customDiv.classList.add('hidden');
+    }
 }
 
-var incomeLabels = [];
-var incomeValues = [];
-var debtsValues = [];
-var oldDebtsValues = [];
-
-for (var key in incomeByLocation) {
-    incomeLabels.push(key);
-    incomeValues.push(incomeByLocation[key]);
-    debtsValues.push(debtsByLocation[key]);
-    oldDebtsValues.push(oldDebtsByLocation[key]);
+function getPeriodDates() {
+    var select = document.getElementById('periodSelect').value;
+    var today = new Date();
+    var startDate, endDate;
+    
+    if (select === 'current_month') {
+        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        endDate = today;
+    } else if (select === 'previous_month') {
+        startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+    } else if (select === 'current_year') {
+        startDate = new Date(today.getFullYear(), 0, 1);
+        endDate = today;
+    } else if (select === 'previous_year') {
+        startDate = new Date(today.getFullYear() - 1, 0, 1);
+        endDate = new Date(today.getFullYear() - 1, 11, 31);
+    } else if (select === 'custom') {
+        var startInput = document.getElementById('startDate').value;
+        var endInput = document.getElementById('endDate').value;
+        
+        if (!startInput || !endInput) {
+            alert('Te rog selecteaza ambele date!');
+            return null;
+        }
+        
+        startDate = new Date(startInput);
+        endDate = new Date(endInput);
+    }
+    
+    return { start: startDate, end: endDate };
 }
 
-if (incomeChart) incomeChart.destroy();
-var ctx2 = document.getElementById('incomeChart').getContext('2d');
-incomeChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: incomeLabels,
-        datasets: [
-            {
-                label: 'Incasari',
-                data: incomeValues,
-                backgroundColor: '#3b82f6'
-            },
-            {
-                label: 'Creante',
-                data: debtsValues,
-                backgroundColor: '#f59e0b'
-            },
-            {
-                label: 'Creante >30 zile',
-                data: oldDebtsValues,
-                backgroundColor: '#ef4444'
-            }
-        ]
-    },
-    options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top'
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                formatter: function(value) {
-                    return value.toLocaleString('ro-RO');
-                },
-                font: {
-                    weight: 'bold',
-                    size: 10
+function parseDate(dateStr) {
+    // Formatul din Google Forms: "12/19/2024 14:30:45"
+    if (!dateStr) return null;
+    
+    var parts = dateStr.split(' ')[0].split('/');
+    if (parts.length === 3) {
+        return new Date(parts[2], parts[0] - 1, parts[1]);
+    }
+    return null;
+}
+
+function loadData() {
+    var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv';
+    
+    var period = getPeriodDates();
+    if (!period) return;
+    
+    hideError();
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('stats').classList.add('hidden');
+    document.getElementById('charts').classList.add('hidden');
+    document.getElementById('tableContainer').classList.add('hidden');
+
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            try {
+                if (results.errors.length > 0) {
+                    throw new Error(results.errors[0].message);
                 }
-            }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
 
-	    var totalProblems = 0;
-            var resolvedProblems = 0;
-            
-            for (var j = 0; j < data.length; j++) {
-                var r = data[j];
-                totalProblems += parseInt(r['Probleme ridicate de agenti (numar)']) || 0;
-                resolvedProblems += parseInt(r['Probleme rezolvate (numar)']) || 0;
-            }
+                var data = results.data.filter(function(row) {
+                    if (!row.Timestamp && !row['Punct de lucru']) return false;
+                    
+                    var rowDate = parseDate(row.Timestamp);
+                    if (!rowDate) return true;
+                    
+                    return rowDate >= period.start && rowDate <= period.end;
+                });
 
-            if (problemsChart) problemsChart.destroy();
-            var ctx2 = document.getElementById('problemsChart').getContext('2d');
-            problemsChart = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Rezolvate', 'Nerezolvate'],
-                    datasets: [{
-                        data: [resolvedProblems, totalProblems - resolvedProblems],
-                        backgroundColor: ['#10b981', '#ef4444']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
+                if (data.length === 0) {
+                    throw new Error('Nu exista date pentru perioada selectata!');
+                }
 
-        function displayTable(data) {
-            var tbody = document.querySelector('#dataTable tbody');
-            var html = '';
-            
-            for (var i = 0; i < data.length; i++) {
-                var row = data[i];
-                var sales = (parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)']) || 0).toLocaleString('ro-RO');
-                var income = (parseFloat(row['Total incasari ziua curenta (lei)']) || 0).toLocaleString('ro-RO');
-                var visits = row['Vizite agenti (numar)'] || '0';
-                var clients = row['Clienti noi (numar)'] || '0';
-                
-                html += '<tr>';
-                html += '<td>' + (row.Timestamp || '') + '</td>';
-                html += '<td><strong>' + (row['Punct de lucru'] || '') + '</strong></td>';
-                html += '<td>' + sales + '</td>';
-                html += '<td class="val-green">' + income + '</td>';
-                html += '<td>' + visits + '</td>';
-                html += '<td class="val-blue">' + clients + '</td>';
-                html += '</tr>';
+                displayStats(data);
+                displayCharts(data);
+                displayTable(data);
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('stats').classList.remove('hidden');
+                document.getElementById('charts').classList.remove('hidden');
+                document.getElementById('tableContainer').classList.remove('hidden');
+            } catch (err) {
+                document.getElementById('loading').classList.add('hidden');
+                showError(err.message);
             }
-            
-            tbody.innerHTML = html;
+        },
+        error: function(err) {
+            document.getElementById('loading').classList.add('hidden');
+            showError('Eroare la incarcare: ' + err.message);
         }
+    });
+}
     </script>
 </body>
 </html>
