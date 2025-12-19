@@ -341,12 +341,18 @@ function loadData() {
                 }
 
                 var data = results.data.filter(function(row) {
-                    if (!row.Timestamp && !row['Punct de lucru']) return false;
+                    // Verificăm dacă rândul are date esențiale
+                    if (!row.Timestamp || !row['Punct de lucru']) return false;
                     
                     var rowDate = parseDate(row.Timestamp);
-                    if (!rowDate) return true;
+                    if (!rowDate) return false;
                     
-                    return rowDate >= period.start && rowDate <= period.end;
+                    // Comparăm doar data (An, Lună, Zi), ignorând orele pentru precizie
+                    var d = new Date(rowDate.getFullYear(), rowDate.getMonth(), rowDate.getDate());
+                    var s = new Date(period.start.getFullYear(), period.start.getMonth(), period.start.getDate());
+                    var e = new Date(period.end.getFullYear(), period.end.getMonth(), period.end.getDate());
+                    
+                    return d >= s && d <= e;
                 });
 
                 if (data.length === 0) {
