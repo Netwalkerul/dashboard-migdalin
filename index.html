@@ -324,17 +324,34 @@
             if (salesChart) salesChart.destroy();
             var ctx1 = document.getElementById('salesChart').getContext('2d');
             salesChart = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Vanzari (lei)',
-                        data: values,
-                        backgroundColor: '#3b82f6'
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Vanzari (lei)',
+            data: values,
+            backgroundColor: '#3b82f6'
+        }]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            datalabels: {
+                display: false
+            }
+        },
+        scales: {
+            y: {
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString('ro-RO') + ' lei';
+                    }
+                }
+            }
+        }
+    }
+});
 
             var totalProblems = 0;
             var resolvedProblems = 0;
