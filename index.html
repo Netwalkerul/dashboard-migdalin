@@ -231,7 +231,7 @@
                 <thead>
                     <tr>
                         <th>Data</th>
-                        <th>Punct Lucru</th>
+                        <th>Punct de lucru</th>
                         <th>Vanzari</th>
                         <th>Incasari</th>
                         <th>Vizite</th>
@@ -397,10 +397,10 @@ function displayStats(data) {
 
 function displayCharts(data) {
     const ctxSales = document.getElementById('salesChart').getContext('2d');
-    const labels = [...new Set(data.map(row => row['Punct Lucru']))];
+    const labels = [...new Set(data.map(row => row['Punct de lucru']))];
     
     const salesData = labels.map(label => {
-        return data.filter(row => row['Punct Lucru'] === label)
+        return data.filter(row => row['Punct de lucru'] === label)
                    .reduce((sum, row) => sum + parseFloat(row['Vanzari'] || 0), 0);
     });
 
@@ -430,7 +430,7 @@ function displayTable(data) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${row.Timestamp || ''}</td>
-            <td>${row['Punct Lucru'] || ''}</td>
+            <td>${row['Punct de lucru'] || ''}</td>
             <td class="val-blue">${row['Vanzari'] || 0} lei</td>
             <td class="val-green">${row['Incasari'] || 0} lei</td>
             <td>${row['Vizite'] || 0}</td>
