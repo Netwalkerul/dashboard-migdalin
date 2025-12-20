@@ -245,8 +245,10 @@
 
     <script>
         var salesChart = null;
-	var incomeChart = null;
-	var problemsChart = null;
+		var incomeChart = null;
+		var visitsChart = null;
+		var problemsChart = null;
+	
 
         function showError(msg) {
             var el = document.getElementById('error');
@@ -519,6 +521,63 @@ incomeChart = new Chart(ctxIncome, {
             x: {
                 stacked: false
             },
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
+<div class="chart-container">
+    <h3 class="chart-title">Vizite agenti pe punct de lucru</h3>
+    <div class="chart-wrapper">
+        <canvas id="visitsChart"></canvas>
+    </div>
+</div>
+
+// Grafic pentru Vizite Agenți
+const ctxVisits = document.getElementById('visitsChart').getContext('2d');
+
+const visitsData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseInt(row['Vizite agenti (numar)'] || 0), 0);
+});
+
+if (visitsChart) visitsChart.destroy();
+
+visitsChart = new Chart(ctxVisits, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Vizite Agenți',
+            data: visitsData,
+            backgroundColor: '#8b5cf6'
+        }]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                    size: 12
+                },
+                formatter: function(value) {
+                    if (value === 0) return '';
+                    return value.toLocaleString('ro-RO');
+                }
+            }
+        },
+        scales: {
             y: {
                 beginAtZero: true
             }
