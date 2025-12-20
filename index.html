@@ -223,6 +223,12 @@
         <canvas id="visitsChart"></canvas>
     </div>
 </div>
+<div class="chart-container">
+    <h3 class="chart-title">Curse de livrat pe punct de lucru</h3>
+    <div class="chart-wrapper">
+        <canvas id="deliveriesChart"></canvas>
+    </div>
+</div>
             <div class="chart-container">
                 <h3 class="chart-title">Status Probleme</h3>
                 <div class="chart-wrapper">
@@ -253,6 +259,7 @@
         var salesChart = null;
 		var incomeChart = null;
 		var visitsChart = null;
+		var deliveriesChart = null;
 		var problemsChart = null;
 	
 
@@ -553,6 +560,56 @@ visitsChart = new Chart(ctxVisits, {
             label: 'Vizite Agenți',
             data: visitsData,
             backgroundColor: '#8b5cf6'
+        }]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                    size: 12
+                },
+                formatter: function(value) {
+                    if (value === 0) return '';
+                    return value.toLocaleString('ro-RO');
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
+// Grafic pentru Curse de livrat
+const ctxDeliveries = document.getElementById('deliveriesChart').getContext('2d');
+
+const deliveriesData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseInt(row['Curse de livrat (numar)'] || 0), 0);
+});
+
+if (deliveriesChart) deliveriesChart.destroy();
+
+deliveriesChart = new Chart(ctxDeliveries, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Curse de livrat',
+            data: deliveriesData,
+            backgroundColor: '#f59e0b'
         }]
     },
     options: { 
