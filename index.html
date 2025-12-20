@@ -217,6 +217,12 @@
         <canvas id="incomeChart"></canvas>
     </div>
 </div>
+<div class="chart-container">
+    <h3 class="chart-title">Vizite agenti pe punct de lucru</h3>
+    <div class="chart-wrapper">
+        <canvas id="visitsChart"></canvas>
+    </div>
+</div>
             <div class="chart-container">
                 <h3 class="chart-title">Status Probleme</h3>
                 <div class="chart-wrapper">
@@ -528,13 +534,6 @@ incomeChart = new Chart(ctxIncome, {
     },
     plugins: [ChartDataLabels]
 });
-
-<div class="chart-container">
-    <h3 class="chart-title">Vizite agenti pe punct de lucru</h3>
-    <div class="chart-wrapper">
-        <canvas id="visitsChart"></canvas>
-    </div>
-</div>
 
 // Grafic pentru Vizite Agenți
 const ctxVisits = document.getElementById('visitsChart').getContext('2d');
