@@ -229,6 +229,12 @@
         <canvas id="deliveriesChart"></canvas>
     </div>
 </div>
+<div class="chart-container">
+    <h3 class="chart-title">Clienti noi pe punct de lucru</h3>
+    <div class="chart-wrapper">
+        <canvas id="newClientsChart"></canvas>
+    </div>
+</div>
             <div class="chart-container">
                 <h3 class="chart-title">Status Probleme</h3>
                 <div class="chart-wrapper">
@@ -260,6 +266,7 @@
 		var incomeChart = null;
 		var visitsChart = null;
 		var deliveriesChart = null;
+		var newClientsChart = null;
 		var problemsChart = null;
 	
 
@@ -610,6 +617,56 @@ deliveriesChart = new Chart(ctxDeliveries, {
             label: 'Curse de livrat',
             data: deliveriesData,
             backgroundColor: '#f59e0b'
+        }]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                    size: 12
+                },
+                formatter: function(value) {
+                    if (value === 0) return '';
+                    return value.toLocaleString('ro-RO');
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
+// Grafic pentru Clienti noi
+const ctxNewClients = document.getElementById('newClientsChart').getContext('2d');
+
+const newClientsData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseInt(row['Clienti noi (numar)'] || 0), 0);
+});
+
+if (newClientsChart) newClientsChart.destroy();
+
+newClientsChart = new Chart(ctxNewClients, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Clienti noi',
+            data: newClientsData,
+            backgroundColor: '#3b82f6'
         }]
     },
     options: { 
