@@ -363,6 +363,17 @@
         </div>
         <div class="text-section-content" id="groupsSection"></div>
     </div>
+	    <div class="text-section">
+        <div class="text-section-header" onclick="toggleSection('ordersSection')">
+            <div class="text-section-title">
+                <span>🛒</span>
+                <span>Comenzi plasate</span>
+                <span class="text-section-badge" id="ordersBadge">0</span>
+            </div>
+            <span class="text-section-icon" id="ordersIcon">▼</span>
+        </div>
+        <div class="text-section-content" id="ordersSection"></div>
+    </div>
 </div>
             <div class="chart-container">
                 <h3 class="chart-title">Status Probleme</h3>
@@ -905,10 +916,57 @@ function toggleSection(sectionId) {
 
 function displayTextSections(data) {
     displayGroupsSection(data);
+	displayOrdersSection(data);
     
     document.getElementById('textSections').classList.remove('hidden');
 }
-
+function displayOrdersSection(data) {
+    var section = document.getElementById('ordersSection');
+    var badge = document.getElementById('ordersBadge');
+    
+    // Grupare pe punct de lucru
+    var locations = {};
+    data.forEach(function(row) {
+        var loc = row['Punct de lucru'];
+        if (!locations[loc]) {
+            locations[loc] = [];
+        }
+        locations[loc].push(row);
+    });
+    
+    var html = '';
+    var totalEntries = 0;
+    
+    Object.keys(locations).forEach(function(loc) {
+        var rows = locations[loc];
+        rows.forEach(function(row) {
+            var orders = row['Comenzi plasate (furnizor / valoare / perioada acoperita / verificat stocuri alte gestiuni (da/nu))'] || '';
+            
+            if (orders && orders.trim() !== '' && orders !== '-') {
+                totalEntries++;
+                html += '<div class="location-item">';
+                html += '<div class="location-header">';
+                html += '<span class="location-icon">📍</span>';
+                html += '<span>' + loc + '</span>';
+                html += '<span class="location-date">' + row.Timestamp + '</span>';
+                html += '</div>';
+                
+                html += '<div class="data-row">';
+                html += '<div class="data-value">' + orders + '</div>';
+                html += '</div>';
+                
+                html += '</div>';
+            }
+        });
+    });
+    
+    if (html === '') {
+        html = '<div class="empty-state">Nu există date pentru perioada selectată</div>';
+    }
+    
+    section.innerHTML = html;
+    badge.textContent = totalEntries;
+}
 function displayGroupsSection(data) {
     var section = document.getElementById('groupsSection');
     var badge = document.getElementById('groupsBadge');
