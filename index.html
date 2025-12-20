@@ -992,6 +992,98 @@ function displayOrdersSection(data) {
     badge.textContent = totalEntries;
 }
 
+function displayCompetitionSection(data) {
+    var section = document.getElementById('competitionSection');
+    var badge = document.getElementById('competitionBadge');
+    
+    // Căutăm coloanele corecte
+    var nameColumn = null;
+    var activityColumn = null;
+    var actionColumn = null;
+    
+    if (data.length > 0) {
+        var columns = Object.keys(data[0]);
+        nameColumn = columns.find(function(col) {
+            return col.toLowerCase().includes('numele concurentului');
+        });
+        activityColumn = columns.find(function(col) {
+            return col.toLowerCase().includes('tipul actiunii concurentiale');
+        });
+        actionColumn = columns.find(function(col) {
+            return col.toLowerCase().includes('actiune propusa');
+        });
+    }
+    
+    if (!nameColumn || !activityColumn || !actionColumn) {
+        section.innerHTML = '<div class="empty-state">Coloanele pentru concurență nu au fost găsite în fișier</div>';
+        badge.textContent = '0';
+        return;
+    }
+    
+    // Grupare pe punct de lucru
+    var locations = {};
+    data.forEach(function(row) {
+        var loc = row['Punct de lucru'];
+        if (!locations[loc]) {
+            locations[loc] = [];
+        }
+        locations[loc].push(row);
+    });
+    
+    var html = '';
+    var totalEntries = 0;
+    
+    Object.keys(locations).forEach(function(loc) {
+        var rows = locations[loc];
+        rows.forEach(function(row) {
+            var name = (row[nameColumn] || '').trim();
+            var activity = (row[activityColumn] || '').trim();
+            var action = (row[actionColumn] || '').trim();
+            
+            // Verificăm dacă există cel puțin un câmp completat și diferit de '-'
+            if ((name && name !== '-') || (activity && activity !== '-') || (action && action !== '-')) {
+                totalEntries++;
+                html += '<div class="location-item">';
+                html += '<div class="location-header">';
+                html += '<span class="location-icon">📍</span>';
+                html += '<span>' + loc + '</span>';
+                html += '<span class="location-date">' + row.Timestamp + '</span>';
+                html += '</div>';
+                
+                if (name && name !== '-') {
+                    html += '<div class="data-row">';
+                    html += '<div class="data-label">Nume</div>';
+                    html += '<div class="data-value">' + name + '</div>';
+                    html += '</div>';
+                }
+                
+                if (activity && activity !== '-') {
+                    html += '<div class="data-row">';
+                    html += '<div class="data-label">Activitate</div>';
+                    html += '<div class="data-value">' + activity + '</div>';
+                    html += '</div>';
+                }
+                
+                if (action && action !== '-') {
+                    html += '<div class="data-row">';
+                    html += '<div class="data-label">Acțiune</div>';
+                    html += '<div class="data-value">' + action + '</div>';
+                    html += '</div>';
+                }
+                
+                html += '</div>';
+            }
+        });
+    });
+    
+    if (html === '') {
+        html = '<div class="empty-state">Nu există date pentru perioada selectată</div>';
+    }
+    
+    section.innerHTML = html;
+    badge.textContent = totalEntries;
+}
+
 function displayGroupsSection(data) {
     var section = document.getElementById('groupsSection');
     var badge = document.getElementById('groupsBadge');
