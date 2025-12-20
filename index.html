@@ -451,48 +451,81 @@ function displayCharts(data) {
         plugins: [ChartDataLabels]
     });
     
-    // Grafic pentru Încasări
-    const ctxIncome = document.getElementById('incomeChart').getContext('2d');
-    const incomeData = labels.map(label => {
-        return data.filter(row => row['Punct de lucru'] === label)
-                   .reduce((sum, row) => sum + parseFloat(row['Total incasari ziua curenta (lei)'] || 0), 0);
-    });
+    // Grafic pentru Încasări (3 coloane per punct de lucru)
+const ctxIncome = document.getElementById('incomeChart').getContext('2d');
 
-    if (incomeChart) incomeChart.destroy();
-    
-    incomeChart = new Chart(ctxIncome, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Încasări',
+const incomeData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseFloat(row['Total incasari ziua curenta (lei)'] || 0), 0);
+});
+
+const debtsData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseFloat(row['Din care, creante (lei)'] || 0), 0);
+});
+
+const oldDebtsData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseFloat(row['Din care, mai vechi de 30 zile de la scadenta'] || 0), 0);
+});
+
+if (incomeChart) incomeChart.destroy();
+
+incomeChart = new Chart(ctxIncome, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Total Încasări',
                 data: incomeData,
                 backgroundColor: '#10b981'
-            }]
-        },
-        options: { 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
+            },
+            {
+                label: 'Creanțe',
+                data: debtsData,
+                backgroundColor: '#f59e0b'
+            },
+            {
+                label: 'Creanțe > 30 zile',
+                data: oldDebtsData,
+                backgroundColor: '#ef4444'
+            }
+        ]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                    size: 11
                 },
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top',
-                    color: '#333',
-                    font: {
-                        weight: 'bold',
-                        size: 12
-                    },
-                    formatter: function(value) {
-                        return value.toLocaleString('ro-RO');
-                    }
+                formatter: function(value) {
+                    if (value === 0) return '';
+                    return value.toLocaleString('ro-RO');
                 }
             }
         },
-        plugins: [ChartDataLabels]
-    });
+        scales: {
+            x: {
+                stacked: false
+            },
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
 
     // Grafic pentru Probleme
     let totalProblems = 0;
