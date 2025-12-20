@@ -924,6 +924,28 @@ function displayOrdersSection(data) {
     var section = document.getElementById('ordersSection');
     var badge = document.getElementById('ordersBadge');
     
+    // Debug: Verificăm ce coloane există în primul rând de date
+    if (data.length > 0) {
+        console.log('Coloane disponibile:', Object.keys(data[0]));
+        console.log('Primul rând complet:', data[0]);
+    }
+    
+    // Căutăm coloana corectă pentru comenzi
+    var ordersColumn = null;
+    if (data.length > 0) {
+        var columns = Object.keys(data[0]);
+        ordersColumn = columns.find(function(col) {
+            return col.toLowerCase().includes('comenzi plasate');
+        });
+        console.log('Coloana găsită pentru comenzi:', ordersColumn);
+    }
+    
+    if (!ordersColumn) {
+        section.innerHTML = '<div class="empty-state">Coloana pentru comenzi nu a fost găsită în fișier</div>';
+        badge.textContent = '0';
+        return;
+    }
+    
     // Grupare pe punct de lucru
     var locations = {};
     data.forEach(function(row) {
@@ -940,7 +962,9 @@ function displayOrdersSection(data) {
     Object.keys(locations).forEach(function(loc) {
         var rows = locations[loc];
         rows.forEach(function(row) {
-            var orders = row['Comenzi plasate (furnizor / valoare / perioada acoperita / verificat stocuri alte gestiuni (da/nu))'] || '';
+            var orders = row[ordersColumn] || '';
+            
+            console.log('Verificăm comenzi pentru ' + loc + ':', orders);
             
             if (orders && orders.trim() !== '' && orders !== '-') {
                 totalEntries++;
@@ -967,6 +991,7 @@ function displayOrdersSection(data) {
     section.innerHTML = html;
     badge.textContent = totalEntries;
 }
+
 function displayGroupsSection(data) {
     var section = document.getElementById('groupsSection');
     var badge = document.getElementById('groupsBadge');
