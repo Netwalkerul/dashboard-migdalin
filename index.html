@@ -350,6 +350,12 @@
         <canvas id="newClientsChart"></canvas>
     </div>
 </div>
+<div class="chart-container">
+    <h3 class="chart-title">Probleme pe punct de lucru</h3>
+    <div class="chart-wrapper">
+        <canvas id="problemsChart"></canvas>
+    </div>
+</div>
 <!-- Sectiuni text -->
 <div id="textSections" class="hidden">
     <div class="text-section">
@@ -394,7 +400,8 @@
 		var incomeChart = null;
 		var visitsChart = null;
 		var deliveriesChart = null;
-		var newClientsChart = null;	
+		var newClientsChart = null;
+		var problemsChart = null;		
 
         function showError(msg) {
             var el = document.getElementById('error');
@@ -824,6 +831,124 @@ newClientsChart = new Chart(ctxNewClients, {
     },
     plugins: [ChartDataLabels]
 });
+
+// Grafic pentru Clienti noi
+const ctxNewClients = document.getElementById('newClientsChart').getContext('2d');
+
+const newClientsData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseInt(row['Clienti noi (numar)'] || 0), 0);
+});
+
+if (newClientsChart) newClientsChart.destroy();
+
+newClientsChart = new Chart(ctxNewClients, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Clienti noi',
+            data: newClientsData,
+            backgroundColor: '#3b82f6'
+        }]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                    size: 12
+                },
+                formatter: function(value) {
+                    if (value === 0) return '';
+                    return value.toLocaleString('ro-RO');
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+
+// Grafic pentru Probleme
+const ctxProblems = document.getElementById('problemsChart').getContext('2d');
+
+const problemsRaisedData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseInt(row['Probleme ridicate de agenti (numar)'] || 0), 0);
+});
+
+const problemsResolvedData = labels.map(label => {
+    return data.filter(row => row['Punct de lucru'] === label)
+               .reduce((sum, row) => sum + parseInt(row['Probleme rezolvate (numar)'] || 0), 0);
+});
+
+if (problemsChart) problemsChart.destroy();
+
+problemsChart = new Chart(ctxProblems, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Probleme ridicate',
+                data: problemsRaisedData,
+                backgroundColor: '#3b82f6'
+            },
+            {
+                label: 'Probleme rezolvate',
+                data: problemsResolvedData,
+                backgroundColor: '#ef4444'
+            }
+        ]
+    },
+    options: { 
+        responsive: true, 
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
+            },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                color: '#333',
+                font: {
+                    weight: 'bold',
+                    size: 11
+                },
+                formatter: function(value) {
+                    if (value === 0) return '';
+                    return value.toLocaleString('ro-RO');
+                }
+            }
+        },
+        scales: {
+            x: {
+                stacked: false
+            },
+            y: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+}
+
 }
 
 function toggleSection(sectionId) {
