@@ -387,24 +387,7 @@
     <div class="text-section-content" id="competitionSection"></div>
 </div>
 </div>
-
-        <div id="tableContainer" class="table-container hidden">
-            <h3 class="chart-title">Date Detaliate</h3>
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Punct de lucru</th>
-                        <th>Vanzari</th>
-                        <th>Incasari</th>
-                        <th>Vizite</th>
-                        <th>Clienti</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+</div>
 
     <script>
         var salesChart = null;
@@ -494,7 +477,6 @@ function loadData() {
     document.getElementById('stats').classList.add('hidden');
     document.getElementById('charts').classList.add('hidden');
 	document.getElementById('textSections').classList.add('hidden');
-    document.getElementById('tableContainer').classList.add('hidden');
 
     Papa.parse(url, {
         download: true,
@@ -527,14 +509,12 @@ function loadData() {
 
                 displayStats(data);
                 displayCharts(data);
-                displayTable(data);
 				displayTextSections(data);
 
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('stats').classList.remove('hidden');
                 document.getElementById('charts').classList.remove('hidden');
 				document.getElementById('textSections').classList.remove('hidden');
-                document.getElementById('tableContainer').classList.remove('hidden');
             } catch (err) {
                 document.getElementById('loading').classList.add('hidden');
                 showError(err.message);
@@ -844,24 +824,6 @@ newClientsChart = new Chart(ctxNewClients, {
     },
     plugins: [ChartDataLabels]
 });
-}
-
-function displayTable(data) {
-    const tbody = document.querySelector('#dataTable tbody');
-    tbody.innerHTML = '';
-    
-    data.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-    <td>${row.Timestamp || ''}</td>
-    <td>${row['Punct de lucru'] || ''}</td>
-    <td class="val-blue">${(parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)']) || 0).toLocaleString()} lei</td>
-    <td class="val-green">${(parseFloat(row['Total incasari ziua curenta (lei)']) || 0).toLocaleString()} lei</td>
-    <td>${row['Vizite agenti (numar)'] || 0}</td>
-    <td>${row['Clienti noi (numar)'] || 0}</td>
-`;
-        tbody.appendChild(tr);
-    });
 }
 
 function toggleSection(sectionId) {
