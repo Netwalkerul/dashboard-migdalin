@@ -375,6 +375,17 @@
         <div class="text-section-content" id="ordersSection"></div>
     </div>
 </div>
+<div class="text-section">
+    <div class="text-section-header" onclick="toggleSection('competitionSection')">
+        <div class="text-section-title">
+            <span>⚔️</span>
+            <span>Activitate concurențială</span>
+            <span class="text-section-badge" id="competitionBadge">0</span>
+        </div>
+        <span class="text-section-icon" id="competitionIcon">▼</span>
+    </div>
+    <div class="text-section-content" id="competitionSection"></div>
+</div>
             <div class="chart-container">
                 <h3 class="chart-title">Status Probleme</h3>
                 <div class="chart-wrapper">
@@ -917,6 +928,7 @@ function toggleSection(sectionId) {
 function displayTextSections(data) {
     displayGroupsSection(data);
 	displayOrdersSection(data);
+	displayCompetitionSection(data);
     
     document.getElementById('textSections').classList.remove('hidden');
 }
