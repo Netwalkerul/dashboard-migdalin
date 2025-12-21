@@ -392,6 +392,17 @@
     </div>
     <div class="text-section-content" id="competitionSection"></div>
 </div>
+<div class="text-section">
+    <div class="text-section-header" onclick="toggleSection('problemsDetailsSection')">
+        <div class="text-section-title">
+            <span>⚠️</span>
+            <span>Probleme</span>
+            <span class="text-section-badge" id="problemsDetailsBadge">0</span>
+        </div>
+        <span class="text-section-icon" id="problemsDetailsIcon">▼</span>
+    </div>
+    <div class="text-section-content" id="problemsDetailsSection"></div>
+</div>
 </div>
 </div>
 
@@ -916,6 +927,7 @@ function displayTextSections(data) {
     displayGroupsSection(data);
 	displayOrdersSection(data);
 	displayCompetitionSection(data);
+	displayProblemsDetailsSection(data);
     
     document.getElementById('textSections').classList.remove('hidden');
 }
@@ -1128,6 +1140,87 @@ function displayGroupsSection(data) {
     section.innerHTML = html;
     badge.textContent = totalEntries;
 }
+
+function displayProblemsDetailsSection(data) {
+    var section = document.getElementById('problemsDetailsSection');
+    var badge = document.getElementById('problemsDetailsBadge');
+    
+    // Căutăm coloanele corecte
+    var raisedColumn = null;
+    var resolvedColumn = null;
+    
+    if (data.length > 0) {
+        var columns = Object.keys(data[0]);
+        raisedColumn = columns.find(function(col) {
+            return col.toLowerCase().includes('probleme critice ridicate de agenti');
+        });
+        resolvedColumn = columns.find(function(col) {
+            return col.toLowerCase().includes('probleme rezolvate (detalii)');
+        });
+    }
+    
+    if (!raisedColumn || !resolvedColumn) {
+        section.innerHTML = '<div class="empty-state">Coloanele pentru probleme nu au fost găsite în fișier</div>';
+        badge.textContent = '0';
+        return;
+    }
+    
+    // Grupare pe punct de lucru
+    var locations = {};
+    data.forEach(function(row) {
+        var loc = row['Punct de lucru'];
+        if (!locations[loc]) {
+            locations[loc] = [];
+        }
+        locations[loc].push(row);
+    });
+    
+    var html = '';
+    var totalEntries = 0;
+    
+    Object.keys(locations).forEach(function(loc) {
+        var rows = locations[loc];
+        rows.forEach(function(row) {
+            var raised = (row[raisedColumn] || '').trim();
+            var resolved = (row[resolvedColumn] || '').trim();
+            
+            // Verificăm dacă există cel puțin un câmp completat și diferit de '-'
+            if ((raised && raised !== '-') || (resolved && resolved !== '-')) {
+                totalEntries++;
+                html += '<div class="location-item">';
+                html += '<div class="location-header">';
+                html += '<span class="location-icon">📍</span>';
+                html += '<span>' + loc + '</span>';
+                html += '<span class="location-date">' + row.Timestamp + '</span>';
+                html += '</div>';
+                
+                if (raised && raised !== '-') {
+                    html += '<div class="data-row">';
+                    html += '<div class="data-label">Semnalate</div>';
+                    html += '<div class="data-value">' + raised + '</div>';
+                    html += '</div>';
+                }
+                
+                if (resolved && resolved !== '-') {
+                    html += '<div class="data-row">';
+                    html += '<div class="data-label">Rezolvate</div>';
+                    html += '<div class="data-value">' + resolved + '</div>';
+                    html += '</div>';
+                }
+                
+                html += '</div>';
+            }
+        });
+    });
+    
+    if (html === '') {
+        html = '<div class="empty-state">Nu există date pentru perioada selectată</div>';
+    }
+    
+    section.innerHTML = html;
+    badge.textContent = totalEntries;
+}
+
     </script>
 </body>
 </html>
