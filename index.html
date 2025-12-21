@@ -97,9 +97,6 @@
         .stat-card.blue { border-left-color: #3b82f6; }
         .stat-card.green { border-left-color: #10b981; }
         .stat-card.purple { border-left-color: #8b5cf6; }
-        .stat-card.orange { border-left-color: #f59e0b; }
-        .stat-card.red { border-left-color: #ef4444; }
-        .stat-card.yellow { border-left-color: #eab308; }
         .stat-label {
             font-size: 13px;
             color: #666;
@@ -125,187 +122,153 @@
             margin-bottom: 20px;
         }
         .chart-wrapper { position: relative; height: 300px; }
-        .table-container {
+        .hidden { display: none; }
+        
+        .text-section {
             background: white;
             border-radius: 15px;
-            padding: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow-x: auto;
+            overflow: hidden;
         }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th {
-            background: #f8f9fa;
-            padding: 12px 8px;
-            text-align: left;
+
+        .text-section-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .text-section-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+        }
+
+        .text-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .text-section-badge {
+            background: rgba(255,255,255,0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .text-section-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .text-section-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .text-section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .text-section-content.expanded {
+            max-height: 5000px;
+        }
+
+        .location-item {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .location-item:last-child {
+            border-bottom: none;
+        }
+
+        .location-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 16px;
             font-weight: 600;
             color: #333;
-            border-bottom: 2px solid #e5e7eb;
         }
-        td { padding: 12px 8px; border-bottom: 1px solid #f1f3f5; color: #666; }
-        tr:hover { background: #f8f9ff; }
-        .val-green { color: #10b981; font-weight: 600; }
-        .val-blue { color: #3b82f6; font-weight: 600; }
-        .hidden { display: none; }
-        .instructions {
-            background: #e7f3ff;
-            border: 2px solid #90caf9;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+
+        .location-icon {
+            color: #667eea;
+        }
+
+        .location-date {
+            font-size: 13px;
+            color: #999;
+            font-weight: 400;
+            margin-left: auto;
+        }
+
+        .data-row {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .data-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .data-value {
             font-size: 14px;
+            color: #333;
             line-height: 1.6;
         }
-        .bold-text {
-            font-weight: bold;
-            color: #1976d2;
+
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: #999;
         }
-		
-		.text-section {
-    background: white;
-    border-radius: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-.text-section-header {
-    padding: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.text-section-header:hover {
-    background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
-}
-
-.text-section-title {
-    font-size: 18px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.text-section-badge {
-    background: rgba(255,255,255,0.3);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.text-section-icon {
-    font-size: 20px;
-    transition: transform 0.3s;
-}
-
-.text-section-icon.expanded {
-    transform: rotate(180deg);
-}
-
-.text-section-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.text-section-content.expanded {
-    max-height: 5000px;
-}
-
-.location-item {
-    padding: 20px;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.location-item:last-child {
-    border-bottom: none;
-}
-
-.location-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 15px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-}
-
-.location-icon {
-    color: #667eea;
-}
-
-.location-date {
-    font-size: 13px;
-    color: #999;
-    font-weight: 400;
-    margin-left: auto;
-}
-
-.data-row {
-    margin-bottom: 12px;
-    padding: 12px;
-    background: #f8f9fa;
-    border-radius: 8px;
-}
-
-.data-label {
-    font-size: 12px;
-    color: #666;
-    font-weight: 600;
-    margin-bottom: 5px;
-    text-transform: uppercase;
-}
-
-.data-value {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.6;
-}
-
-.empty-state {
-    padding: 40px 20px;
-    text-align: center;
-    color: #999;
-}
-		
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-    <h1>Dashboard Presedinte</h1>
-    <p>Rapoarte zilnice directori</p>
-    
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Selecteaza Perioada:</label>
-        <select id="periodSelect" class="url-input" onchange="toggleCustomDates()" style="margin-bottom: 10px;">
-            <option value="current_month">Luna curenta</option>
-            <option value="previous_month">Luna anterioara</option>
-            <option value="current_year">Anul curent</option>
-            <option value="previous_year">Anul anterior</option>
-            <option value="custom">Selecteaza perioada personalizata</option>
-        </select>
-        
-        <div id="customDates" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-            <div>
-                <label style="display: block; font-size: 12px; margin-bottom: 5px; color: #666;">Data start:</label>
-                <input type="date" id="startDate" class="url-input" style="margin-bottom: 0;">
+            <h1>Dashboard Presedinte</h1>
+            <p>Rapoarte zilnice directori</p>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Selecteaza Perioada:</label>
+                <select id="periodSelect" class="url-input" onchange="toggleCustomDates()" style="margin-bottom: 10px;">
+                    <option value="current_month">Luna curenta</option>
+                    <option value="previous_month">Luna anterioara</option>
+                    <option value="current_year">Anul curent</option>
+                    <option value="previous_year">Anul anterior</option>
+                    <option value="custom">Selecteaza perioada personalizata</option>
+                </select>
+                
+                <div id="customDates" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 5px; color: #666;">Data start:</label>
+                        <input type="date" id="startDate" class="url-input" style="margin-bottom: 0;">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; margin-bottom: 5px; color: #666;">Data sfarsit:</label>
+                        <input type="date" id="endDate" class="url-input" style="margin-bottom: 0;">
+                    </div>
+                </div>
             </div>
-            <div>
-                <label style="display: block; font-size: 12px; margin-bottom: 5px; color: #666;">Data sfarsit:</label>
-                <input type="date" id="endDate" class="url-input" style="margin-bottom: 0;">
-            </div>
+            
+            <button class="refresh-btn" onclick="loadData()">Incarca Date</button>
         </div>
-    </div>
-    
-    <button class="refresh-btn" onclick="loadData()">Incarca Date</button>
-</div>
 
         <div id="loading" class="loading hidden">
             <div class="spinner"></div>
@@ -326,100 +289,81 @@
                     <canvas id="salesChart"></canvas>
                 </div>
             </div>
-<div class="chart-container">
-    <h3 class="chart-title">Incasari pe punct de lucru (lei)</h3>
-    <div class="chart-wrapper">
-        <canvas id="incomeChart"></canvas>
-    </div>
-</div>
-<div class="chart-container">
-    <h3 class="chart-title">Vizite agenti pe punct de lucru</h3>
-    <div class="chart-wrapper">
-        <canvas id="visitsChart"></canvas>
-    </div>
-</div>
-<div class="chart-container">
-    <h3 class="chart-title">Curse de livrat pe punct de lucru</h3>
-    <div class="chart-wrapper">
-        <canvas id="deliveriesChart"></canvas>
-    </div>
-</div>
-<div class="chart-container">
-    <h3 class="chart-title">Clienti noi pe punct de lucru</h3>
-    <div class="chart-wrapper">
-        <canvas id="newClientsChart"></canvas>
-    </div>
-</div>
-<!-- Sectiuni text -->
-<div id="textSections" class="hidden">
-    <div class="text-section">
-        <div class="text-section-header" onclick="toggleSection('groupsSection')">
-            <div class="text-section-title">
-                <span>📦</span>
-                <span>Grupe de marfă</span>
-                <span class="text-section-badge" id="groupsBadge">0</span>
-            </div>
-            <span class="text-section-icon" id="groupsIcon">▼</span>
-        </div>
-        <div class="text-section-content" id="groupsSection"></div>
-    </div>
-	    <div class="text-section">
-        <div class="text-section-header" onclick="toggleSection('ordersSection')">
-            <div class="text-section-title">
-                <span>🛒</span>
-                <span>Comenzi plasate</span>
-                <span class="text-section-badge" id="ordersBadge">0</span>
-            </div>
-            <span class="text-section-icon" id="ordersIcon">▼</span>
-        </div>
-        <div class="text-section-content" id="ordersSection"></div>
-    </div>
-</div>
-<div class="text-section">
-    <div class="text-section-header" onclick="toggleSection('competitionSection')">
-        <div class="text-section-title">
-            <span>⚔️</span>
-            <span>Activitate concurențială</span>
-            <span class="text-section-badge" id="competitionBadge">0</span>
-        </div>
-        <span class="text-section-icon" id="competitionIcon">▼</span>
-    </div>
-    <div class="text-section-content" id="competitionSection"></div>
-</div>
+            
             <div class="chart-container">
-                <h3 class="chart-title">Status Probleme</h3>
+                <h3 class="chart-title">Incasari pe punct de lucru (lei)</h3>
                 <div class="chart-wrapper">
-                    <canvas id="problemsChart"></canvas>
+                    <canvas id="incomeChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="chart-title">Vizite agenti pe punct de lucru</h3>
+                <div class="chart-wrapper">
+                    <canvas id="visitsChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="chart-title">Curse de livrat pe punct de lucru</h3>
+                <div class="chart-wrapper">
+                    <canvas id="deliveriesChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3 class="chart-title">Clienti noi pe punct de lucru</h3>
+                <div class="chart-wrapper">
+                    <canvas id="newClientsChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <div id="tableContainer" class="table-container hidden">
-            <h3 class="chart-title">Date Detaliate</h3>
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Punct de lucru</th>
-                        <th>Vanzari</th>
-                        <th>Incasari</th>
-                        <th>Vizite</th>
-                        <th>Clienti</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div id="textSections" class="hidden">
+            <div class="text-section">
+                <div class="text-section-header" onclick="toggleSection('groupsSection')">
+                    <div class="text-section-title">
+                        <span>📦</span>
+                        <span>Grupe de marfă</span>
+                        <span class="text-section-badge" id="groupsBadge">0</span>
+                    </div>
+                    <span class="text-section-icon" id="groupsIcon">▼</span>
+                </div>
+                <div class="text-section-content" id="groupsSection"></div>
+            </div>
+            
+            <div class="text-section">
+                <div class="text-section-header" onclick="toggleSection('ordersSection')">
+                    <div class="text-section-title">
+                        <span>🛒</span>
+                        <span>Comenzi plasate</span>
+                        <span class="text-section-badge" id="ordersBadge">0</span>
+                    </div>
+                    <span class="text-section-icon" id="ordersIcon">▼</span>
+                </div>
+                <div class="text-section-content" id="ordersSection"></div>
+            </div>
+            
+            <div class="text-section">
+                <div class="text-section-header" onclick="toggleSection('competitionSection')">
+                    <div class="text-section-title">
+                        <span>⚔️</span>
+                        <span>Activitate concurențială</span>
+                        <span class="text-section-badge" id="competitionBadge">0</span>
+                    </div>
+                    <span class="text-section-icon" id="competitionIcon">▼</span>
+                </div>
+                <div class="text-section-content" id="competitionSection"></div>
+            </div>
         </div>
     </div>
 
     <script>
         var salesChart = null;
-		var incomeChart = null;
-		var visitsChart = null;
-		var deliveriesChart = null;
-		var newClientsChart = null;
-		var problemsChart = null;
-	
+        var incomeChart = null;
+        var visitsChart = null;
+        var deliveriesChart = null;
+        var newClientsChart = null;
 
         function showError(msg) {
             var el = document.getElementById('error');
@@ -432,724 +376,431 @@
         }
 
         function toggleCustomDates() {
-    var select = document.getElementById('periodSelect');
-    var customDiv = document.getElementById('customDates');
-    
-    if (select.value === 'custom') {
-        customDiv.classList.remove('hidden');
-    } else {
-        customDiv.classList.add('hidden');
-    }
-}
+            var select = document.getElementById('periodSelect');
+            var customDiv = document.getElementById('customDates');
+            
+            if (select.value === 'custom') {
+                customDiv.classList.remove('hidden');
+            } else {
+                customDiv.classList.add('hidden');
+            }
+        }
 
-function getPeriodDates() {
-    var select = document.getElementById('periodSelect').value;
-    var today = new Date();
-    var startDate, endDate;
-    
-    if (select === 'current_month') {
-        startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-        endDate = today;
-    } else if (select === 'previous_month') {
-        startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-        endDate = new Date(today.getFullYear(), today.getMonth(), 0);
-    } else if (select === 'current_year') {
-        startDate = new Date(today.getFullYear(), 0, 1);
-        endDate = today;
-    } else if (select === 'previous_year') {
-        startDate = new Date(today.getFullYear() - 1, 0, 1);
-        endDate = new Date(today.getFullYear() - 1, 11, 31);
-    } else if (select === 'custom') {
-        var startInput = document.getElementById('startDate').value;
-        var endInput = document.getElementById('endDate').value;
-        
-        if (!startInput || !endInput) {
-            alert('Te rog selecteaza ambele date!');
+        function getPeriodDates() {
+            var select = document.getElementById('periodSelect').value;
+            var today = new Date();
+            var startDate, endDate;
+            
+            if (select === 'current_month') {
+                startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                endDate = today;
+            } else if (select === 'previous_month') {
+                startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                endDate = new Date(today.getFullYear(), today.getMonth(), 0);
+            } else if (select === 'current_year') {
+                startDate = new Date(today.getFullYear(), 0, 1);
+                endDate = today;
+            } else if (select === 'previous_year') {
+                startDate = new Date(today.getFullYear() - 1, 0, 1);
+                endDate = new Date(today.getFullYear() - 1, 11, 31);
+            } else if (select === 'custom') {
+                var startInput = document.getElementById('startDate').value;
+                var endInput = document.getElementById('endDate').value;
+                
+                if (!startInput || !endInput) {
+                    alert('Te rog selecteaza ambele date!');
+                    return null;
+                }
+                
+                startDate = new Date(startInput);
+                endDate = new Date(endInput);
+            }
+            
+            return { start: startDate, end: endDate };
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            
+            var datePart = dateStr.split(' ')[0].replace(/\./g, '/');
+            var parts = datePart.split('/');
+            
+            if (parts.length === 3) {
+                return new Date(parts[2], parts[0] - 1, parts[1]);
+            }
             return null;
         }
-        
-        startDate = new Date(startInput);
-        endDate = new Date(endInput);
-    }
-    
-    return { start: startDate, end: endDate };
-}
 
-function parseDate(dateStr) {
-    // Format adaptat pentru Google Sheets: Luna/Zi/An (ex: 12/17/2025)
-    if (!dateStr) return null;
-    
-    // Luăm doar data, fără oră, și transformăm orice punct în slash
-    var datePart = dateStr.split(' ')[0].replace(/\./g, '/');
-    var parts = datePart.split('/');
-    
-    if (parts.length === 3) {
-        // parts[0] este LUNA, parts[1] este ZIUA, parts[2] este ANUL
-        // Scădem 1 din lună pentru că în JavaScript lunile încep de la 0 (Ianuarie = 0)
-        return new Date(parts[2], parts[0] - 1, parts[1]);
-    }
-    return null;
-}
+        function loadData() {
+            var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv';
+            
+            var period = getPeriodDates();
+            if (!period) return;
+            
+            hideError();
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('stats').classList.add('hidden');
+            document.getElementById('charts').classList.add('hidden');
+            document.getElementById('textSections').classList.add('hidden');
 
-function loadData() {
-    var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv';
-    
-    var period = getPeriodDates();
-    if (!period) return;
-    
-    hideError();
-    document.getElementById('loading').classList.remove('hidden');
-    document.getElementById('stats').classList.add('hidden');
-    document.getElementById('charts').classList.add('hidden');
-	document.getElementById('textSections').classList.add('hidden');
-    document.getElementById('tableContainer').classList.add('hidden');
+            Papa.parse(url, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    try {
+                        if (results.errors.length > 0) {
+                            throw new Error(results.errors[0].message);
+                        }
 
-    Papa.parse(url, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            try {
-                if (results.errors.length > 0) {
-                    throw new Error(results.errors[0].message);
+                        var data = results.data.filter(function(row) {
+                            if (!row.Timestamp || !row['Punct de lucru']) return false;
+                            
+                            var rowDate = parseDate(row.Timestamp);
+                            if (!rowDate) return false;
+                            
+                            var d = new Date(rowDate.getFullYear(), rowDate.getMonth(), rowDate.getDate());
+                            var s = new Date(period.start.getFullYear(), period.start.getMonth(), period.start.getDate());
+                            var e = new Date(period.end.getFullYear(), period.end.getMonth(), period.end.getDate());
+                            
+                            return d >= s && d <= e;
+                        });
+
+                        if (data.length === 0) {
+                            throw new Error('Nu exista date pentru perioada selectata!');
+                        }
+
+                        displayStats(data);
+                        displayCharts(data);
+                        displayTextSections(data);
+
+                        document.getElementById('loading').classList.add('hidden');
+                        document.getElementById('stats').classList.remove('hidden');
+                        document.getElementById('charts').classList.remove('hidden');
+                        document.getElementById('textSections').classList.remove('hidden');
+                    } catch (err) {
+                        document.getElementById('loading').classList.add('hidden');
+                        showError(err.message);
+                    }
+                },
+                error: function(err) {
+                    document.getElementById('loading').classList.add('hidden');
+                    showError('Eroare la incarcare: ' + err.message);
                 }
+            });
+        }
 
-                var data = results.data.filter(function(row) {
-                    // Verificăm dacă rândul are date esențiale
-                    if (!row.Timestamp || !row['Punct de lucru']) return false;
-                    
-                    var rowDate = parseDate(row.Timestamp);
-                    if (!rowDate) return false;
-                    
-                    // Comparăm doar data (An, Lună, Zi), ignorând orele pentru precizie
-                    var d = new Date(rowDate.getFullYear(), rowDate.getMonth(), rowDate.getDate());
-                    var s = new Date(period.start.getFullYear(), period.start.getMonth(), period.start.getDate());
-                    var e = new Date(period.end.getFullYear(), period.end.getMonth(), period.end.getDate());
-                    
-                    return d >= s && d <= e;
+        function displayStats(data) {
+            const statsDiv = document.getElementById('stats');
+            let totalSales = 0;
+            let totalIncome = 0;
+            let totalVisits = 0;
+
+            data.forEach(row => {
+                totalSales += parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)'] || 0);
+                totalIncome += parseFloat(row['Total incasari ziua curenta (lei)'] || 0);
+                totalVisits += parseInt(row['Vizite agenti (numar)'] || 0);
+            });
+
+            statsDiv.innerHTML = `
+                <div class="stat-card blue">
+                    <div class="stat-label">Total Vânzări</div>
+                    <div class="stat-value">${totalSales.toLocaleString()} lei</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-label">Total Încasări</div>
+                    <div class="stat-value">${totalIncome.toLocaleString()} lei</div>
+                </div>
+                <div class="stat-card purple">
+                    <div class="stat-label">Total Vizite</div>
+                    <div class="stat-value">${totalVisits.toLocaleString()}</div>
+                </div>
+            `;
+        }
+
+        function displayCharts(data) {
+            const labels = [...new Set(data.map(row => row['Punct de lucru']))];
+            
+            // Grafic Vanzari
+            const ctxSales = document.getElementById('salesChart').getContext('2d');
+            const salesData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)'] || 0), 0);
+            });
+
+            if (salesChart) salesChart.destroy();
+            
+            salesChart = new Chart(ctxSales, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Vânzări',
+                        data: salesData,
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#333',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(value) {
+                                return value.toLocaleString('ro-RO');
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+            
+            // Grafic Incasari
+            const ctxIncome = document.getElementById('incomeChart').getContext('2d');
+            const incomeData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseFloat(row['Total incasari ziua curenta (lei)'] || 0), 0);
+            });
+
+            const debtsData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseFloat(row['Din care, creante (lei)'] || 0), 0);
+            });
+
+            const oldDebtsData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseFloat(row['Din care, mai vechi de 30 zile de la scadenta'] || 0), 0);
+            });
+
+            if (incomeChart) incomeChart.destroy();
+
+            incomeChart = new Chart(ctxIncome, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Încasări',
+                            data: incomeData,
+                            backgroundColor: '#10b981'
+                        },
+                        {
+                            label: 'Creanțe',
+                            data: debtsData,
+                            backgroundColor: '#f59e0b'
+                        },
+                        {
+                            label: 'Creanțe > 30 zile',
+                            data: oldDebtsData,
+                            backgroundColor: '#ef4444'
+                        }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top' },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#333',
+                            font: { weight: 'bold', size: 11 },
+                            formatter: function(value) {
+                                if (value === 0) return '';
+                                return value.toLocaleString('ro-RO');
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: false },
+                        y: { beginAtZero: true }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Grafic Vizite
+            const ctxVisits = document.getElementById('visitsChart').getContext('2d');
+            const visitsData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseInt(row['Vizite agenti (numar)'] || 0), 0);
+            });
+
+            if (visitsChart) visitsChart.destroy();
+
+            visitsChart = new Chart(ctxVisits, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Vizite Agenți',
+                        data: visitsData,
+                        backgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#333',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(value) {
+                                if (value === 0) return '';
+                                return value.toLocaleString('ro-RO');
+                            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true } }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Grafic Curse de livrat
+            const ctxDeliveries = document.getElementById('deliveriesChart').getContext('2d');
+            const deliveriesData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseInt(row['Curse de livrat (numar)'] || 0), 0);
+            });
+
+            if (deliveriesChart) deliveriesChart.destroy();
+
+            deliveriesChart = new Chart(ctxDeliveries, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Curse de livrat',
+                        data: deliveriesData,
+                        backgroundColor: '#f59e0b'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#333',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(value) {
+                                if (value === 0) return '';
+                                return value.toLocaleString('ro-RO');
+                            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true } }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Grafic Clienti noi
+            const ctxNewClients = document.getElementById('newClientsChart').getContext('2d');
+            const newClientsData = labels.map(label => {
+                return data.filter(row => row['Punct de lucru'] === label)
+                           .reduce((sum, row) => sum + parseInt(row['Clienti noi (numar)'] || 0), 0);
+            });
+
+            if (newClientsChart) newClientsChart.destroy();
+
+            newClientsChart = new Chart(ctxNewClients, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Clienti noi',
+                        data: newClientsData,
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            color: '#333',
+                            font: { weight: 'bold', size: 12 },
+                            formatter: function(value) {
+                                if (value === 0) return '';
+                                return value.toLocaleString('ro-RO');
+                            }
+                        }
+                    },
+                    scales: { y: { beginAtZero: true } }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        function toggleSection(sectionId) {
+            var content = document.getElementById(sectionId);
+            var icon = document.getElementById(sectionId.replace('Section', 'Icon'));
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+
+        function displayTextSections(data) {
+            displayGroupsSection(data);
+            displayOrdersSection(data);
+            displayCompetitionSection(data);
+            
+            document.getElementById('textSections').classList.remove('hidden');
+        }
+
+        function displayOrdersSection(data) {
+            var section = document.getElementById('ordersSection');
+            var badge = document.getElementById('ordersBadge');
+            
+            var ordersColumn = null;
+            if (data.length > 0) {
+                var columns = Object.keys(data[0]);
+                ordersColumn = columns.find(function(col) {
+                    return col.toLowerCase().includes('comenzi plasate');
                 });
-
-                if (data.length === 0) {
-                    throw new Error('Nu exista date pentru perioada selectata!');
-                }
-
-                displayStats(data);
-                displayCharts(data);
-                displayTable(data);
-				displayTextSections(data);
-
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('stats').classList.remove('hidden');
-                document.getElementById('charts').classList.remove('hidden');
-				document.getElementById('textSections').classList.remove('hidden');
-                document.getElementById('tableContainer').classList.remove('hidden');
-            } catch (err) {
-                document.getElementById('loading').classList.add('hidden');
-                showError(err.message);
             }
-        },
-        error: function(err) {
-            document.getElementById('loading').classList.add('hidden');
-            showError('Eroare la incarcare: ' + err.message);
-        }
-    });
-}
-function displayStats(data) {
-    const statsDiv = document.getElementById('stats');
-    let totalSales = 0;
-    let totalIncome = 0;
-    let totalVisits = 0;
-
-    data.forEach(row => {
-        totalSales += parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)'] || 0);
-        totalIncome += parseFloat(row['Total incasari ziua curenta (lei)'] || 0);
-        totalVisits += parseInt(row['Vizite agenti (numar)'] || 0);
-    });
-
-    statsDiv.innerHTML = `
-        <div class="stat-card blue">
-            <div class="stat-label">Total Vânzări</div>
-            <div class="stat-value">${totalSales.toLocaleString()} lei</div>
-        </div>
-        <div class="stat-card green">
-            <div class="stat-label">Total Încasări</div>
-            <div class="stat-value">${totalIncome.toLocaleString()} lei</div>
-        </div>
-        <div class="stat-card purple">
-            <div class="stat-label">Total Vizite</div>
-            <div class="stat-value">${totalVisits.toLocaleString()}</div>
-        </div>
-    `;
-}
-
-function displayCharts(data) {
-    const ctxSales = document.getElementById('salesChart').getContext('2d');
-    const labels = [...new Set(data.map(row => row['Punct de lucru']))];
-    
-    const salesData = labels.map(label => {
-        return data.filter(row => row['Punct de lucru'] === label)
-                   .reduce((sum, row) => sum + parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)'] || 0), 0);
-    });
-
-    if (salesChart) salesChart.destroy();
-    
-    salesChart = new Chart(ctxSales, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Vânzări',
-                data: salesData,
-                backgroundColor: '#667eea'
-            }]
-        },
-        options: { 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                datalabels: {
-                    anchor: 'end',
-                    align: 'top',
-                    color: '#333',
-                    font: {
-                        weight: 'bold',
-                        size: 12
-                    },
-                    formatter: function(value) {
-                        return value.toLocaleString('ro-RO');
-                    }
-                }
-            }
-        },
-        plugins: [ChartDataLabels]
-    });
-    
-    // Grafic pentru Încasări (3 coloane per punct de lucru)
-const ctxIncome = document.getElementById('incomeChart').getContext('2d');
-
-const incomeData = labels.map(label => {
-    return data.filter(row => row['Punct de lucru'] === label)
-               .reduce((sum, row) => sum + parseFloat(row['Total incasari ziua curenta (lei)'] || 0), 0);
-});
-
-const debtsData = labels.map(label => {
-    return data.filter(row => row['Punct de lucru'] === label)
-               .reduce((sum, row) => sum + parseFloat(row['Din care, creante (lei)'] || 0), 0);
-});
-
-const oldDebtsData = labels.map(label => {
-    return data.filter(row => row['Punct de lucru'] === label)
-               .reduce((sum, row) => sum + parseFloat(row['Din care, mai vechi de 30 zile de la scadenta'] || 0), 0);
-});
-
-if (incomeChart) incomeChart.destroy();
-
-incomeChart = new Chart(ctxIncome, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Total Încasări',
-                data: incomeData,
-                backgroundColor: '#10b981'
-            },
-            {
-                label: 'Creanțe',
-                data: debtsData,
-                backgroundColor: '#f59e0b'
-            },
-            {
-                label: 'Creanțe > 30 zile',
-                data: oldDebtsData,
-                backgroundColor: '#ef4444'
-            }
-        ]
-    },
-    options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: true,
-                position: 'top'
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                color: '#333',
-                font: {
-                    weight: 'bold',
-                    size: 11
-                },
-                formatter: function(value) {
-                    if (value === 0) return '';
-                    return value.toLocaleString('ro-RO');
-                }
-            }
-        },
-        scales: {
-            x: {
-                stacked: false
-            },
-            y: {
-                beginAtZero: true
-            }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
-
-// Grafic pentru Vizite Agenți
-const ctxVisits = document.getElementById('visitsChart').getContext('2d');
-
-const visitsData = labels.map(label => {
-    return data.filter(row => row['Punct de lucru'] === label)
-               .reduce((sum, row) => sum + parseInt(row['Vizite agenti (numar)'] || 0), 0);
-});
-
-if (visitsChart) visitsChart.destroy();
-
-visitsChart = new Chart(ctxVisits, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Vizite Agenți',
-            data: visitsData,
-            backgroundColor: '#8b5cf6'
-        }]
-    },
-    options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                color: '#333',
-                font: {
-                    weight: 'bold',
-                    size: 12
-                },
-                formatter: function(value) {
-                    if (value === 0) return '';
-                    return value.toLocaleString('ro-RO');
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
-
-// Grafic pentru Curse de livrat
-const ctxDeliveries = document.getElementById('deliveriesChart').getContext('2d');
-
-const deliveriesData = labels.map(label => {
-    return data.filter(row => row['Punct de lucru'] === label)
-               .reduce((sum, row) => sum + parseInt(row['Curse de livrat (numar)'] || 0), 0);
-});
-
-if (deliveriesChart) deliveriesChart.destroy();
-
-deliveriesChart = new Chart(ctxDeliveries, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Curse de livrat',
-            data: deliveriesData,
-            backgroundColor: '#f59e0b'
-        }]
-    },
-    options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                color: '#333',
-                font: {
-                    weight: 'bold',
-                    size: 12
-                },
-                formatter: function(value) {
-                    if (value === 0) return '';
-                    return value.toLocaleString('ro-RO');
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
-
-// Grafic pentru Clienti noi
-const ctxNewClients = document.getElementById('newClientsChart').getContext('2d');
-
-const newClientsData = labels.map(label => {
-    return data.filter(row => row['Punct de lucru'] === label)
-               .reduce((sum, row) => sum + parseInt(row['Clienti noi (numar)'] || 0), 0);
-});
-
-if (newClientsChart) newClientsChart.destroy();
-
-newClientsChart = new Chart(ctxNewClients, {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Clienti noi',
-            data: newClientsData,
-            backgroundColor: '#3b82f6'
-        }]
-    },
-    options: { 
-        responsive: true, 
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false
-            },
-            datalabels: {
-                anchor: 'end',
-                align: 'top',
-                color: '#333',
-                font: {
-                    weight: 'bold',
-                    size: 12
-                },
-                formatter: function(value) {
-                    if (value === 0) return '';
-                    return value.toLocaleString('ro-RO');
-                }
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    },
-    plugins: [ChartDataLabels]
-});
-
-    // Grafic pentru Probleme
-    let totalProblems = 0;
-    let resolvedProblems = 0;
-    
-    data.forEach(row => {
-        totalProblems += parseInt(row['Probleme ridicate de agenti (numar)']) || 0;
-        resolvedProblems += parseInt(row['Probleme rezolvate (numar)']) || 0;
-    });
-
-    if (problemsChart) problemsChart.destroy();
-    
-    const ctxProblems = document.getElementById('problemsChart').getContext('2d');
-    problemsChart = new Chart(ctxProblems, {
-        type: 'doughnut',
-        data: {
-            labels: ['Rezolvate', 'Nerezolvate'],
-            datasets: [{
-                data: [resolvedProblems, totalProblems - resolvedProblems],
-                backgroundColor: ['#10b981', '#ef4444']
-            }]
-        },
-        options: { 
-            responsive: true, 
-            maintainAspectRatio: false,
-            plugins: {
-                datalabels: {
-                    color: '#fff',
-                    font: {
-                        weight: 'bold',
-                        size: 14
-                    },
-                    formatter: function(value) {
-                        return value;
-                    }
-                }
-            }
-        },
-        plugins: [ChartDataLabels]
-    });
-}
-
-function displayTable(data) {
-    const tbody = document.querySelector('#dataTable tbody');
-    tbody.innerHTML = '';
-    
-    data.forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-    <td>${row.Timestamp || ''}</td>
-    <td>${row['Punct de lucru'] || ''}</td>
-    <td class="val-blue">${(parseFloat(row['Total vanzari ziua curenta (lei, fara TVA)']) || 0).toLocaleString()} lei</td>
-    <td class="val-green">${(parseFloat(row['Total incasari ziua curenta (lei)']) || 0).toLocaleString()} lei</td>
-    <td>${row['Vizite agenti (numar)'] || 0}</td>
-    <td>${row['Clienti noi (numar)'] || 0}</td>
-`;
-        tbody.appendChild(tr);
-    });
-}
-
-function toggleSection(sectionId) {
-    var content = document.getElementById(sectionId);
-    var icon = document.getElementById(sectionId.replace('Section', 'Icon'));
-    
-    if (content.classList.contains('expanded')) {
-        content.classList.remove('expanded');
-        icon.classList.remove('expanded');
-    } else {
-        content.classList.add('expanded');
-        icon.classList.add('expanded');
-    }
-}
-
-function displayTextSections(data) {
-    displayGroupsSection(data);
-	displayOrdersSection(data);
-	displayCompetitionSection(data);
-    
-    document.getElementById('textSections').classList.remove('hidden');
-}
-function displayOrdersSection(data) {
-    var section = document.getElementById('ordersSection');
-    var badge = document.getElementById('ordersBadge');
-    
-    // Debug: Verificăm ce coloane există în primul rând de date
-    if (data.length > 0) {
-        console.log('Coloane disponibile:', Object.keys(data[0]));
-        console.log('Primul rând complet:', data[0]);
-    }
-    
-    // Căutăm coloana corectă pentru comenzi
-    var ordersColumn = null;
-    if (data.length > 0) {
-        var columns = Object.keys(data[0]);
-        ordersColumn = columns.find(function(col) {
-            return col.toLowerCase().includes('comenzi plasate');
-        });
-        console.log('Coloana găsită pentru comenzi:', ordersColumn);
-    }
-    
-    if (!ordersColumn) {
-        section.innerHTML = '<div class="empty-state">Coloana pentru comenzi nu a fost găsită în fișier</div>';
-        badge.textContent = '0';
-        return;
-    }
-    
-    // Grupare pe punct de lucru
-    var locations = {};
-    data.forEach(function(row) {
-        var loc = row['Punct de lucru'];
-        if (!locations[loc]) {
-            locations[loc] = [];
-        }
-        locations[loc].push(row);
-    });
-    
-    var html = '';
-    var totalEntries = 0;
-    
-    Object.keys(locations).forEach(function(loc) {
-        var rows = locations[loc];
-        rows.forEach(function(row) {
-            var orders = row[ordersColumn] || '';
             
-            console.log('Verificăm comenzi pentru ' + loc + ':', orders);
-            
-            if (orders && orders.trim() !== '' && orders !== '-') {
-                totalEntries++;
-                html += '<div class="location-item">';
-                html += '<div class="location-header">';
-                html += '<span class="location-icon">📍</span>';
-                html += '<span>' + loc + '</span>';
-                html += '<span class="location-date">' + row.Timestamp + '</span>';
-                html += '</div>';
-                
-                html += '<div class="data-row">';
-                html += '<div class="data-value">' + orders + '</div>';
-                html += '</div>';
-                
-                html += '</div>';
+            if (!ordersColumn) {
+                section.innerHTML = '<div class="empty-state">Coloana pentru comenzi nu a fost găsită în fișier</div>';
+                badge.textContent = '0';
+                return;
             }
-        });
-    });
-    
-    if (html === '') {
-        html = '<div class="empty-state">Nu există date pentru perioada selectată</div>';
-    }
-    
-    section.innerHTML = html;
-    badge.textContent = totalEntries;
-}
-
-function displayCompetitionSection(data) {
-    var section = document.getElementById('competitionSection');
-    var badge = document.getElementById('competitionBadge');
-    
-    // Căutăm coloanele corecte
-    var nameColumn = null;
-    var activityColumn = null;
-    var actionColumn = null;
-    
-    if (data.length > 0) {
-        var columns = Object.keys(data[0]);
-        nameColumn = columns.find(function(col) {
-            return col.toLowerCase().includes('numele concurentului');
-        });
-        activityColumn = columns.find(function(col) {
-            return col.toLowerCase().includes('tipul actiunii concurentiale');
-        });
-        actionColumn = columns.find(function(col) {
-            return col.toLowerCase().includes('actiune propusa');
-        });
-    }
-    
-    if (!nameColumn || !activityColumn || !actionColumn) {
-        section.innerHTML = '<div class="empty-state">Coloanele pentru concurență nu au fost găsite în fișier</div>';
-        badge.textContent = '0';
-        return;
-    }
-    
-    // Grupare pe punct de lucru
-    var locations = {};
-    data.forEach(function(row) {
-        var loc = row['Punct de lucru'];
-        if (!locations[loc]) {
-            locations[loc] = [];
-        }
-        locations[loc].push(row);
-    });
-    
-    var html = '';
-    var totalEntries = 0;
-    
-    Object.keys(locations).forEach(function(loc) {
-        var rows = locations[loc];
-        rows.forEach(function(row) {
-            var name = (row[nameColumn] || '').trim();
-            var activity = (row[activityColumn] || '').trim();
-            var action = (row[actionColumn] || '').trim();
             
-            // Verificăm dacă există cel puțin un câmp completat și diferit de '-'
-            if ((name && name !== '-') || (activity && activity !== '-') || (action && action !== '-')) {
-                totalEntries++;
-                html += '<div class="location-item">';
-                html += '<div class="location-header">';
-                html += '<span class="location-icon">📍</span>';
-                html += '<span>' + loc + '</span>';
-                html += '<span class="location-date">' + row.Timestamp + '</span>';
-                html += '</div>';
-                
-                if (name && name !== '-') {
-                    html += '<div class="data-row">';
-                    html += '<div class="data-label">Nume</div>';
-                    html += '<div class="data-value">' + name + '</div>';
-                    html += '</div>';
+            var locations = {};
+            data.forEach(function(row) {
+                var loc = row['Punct de lucru'];
+                if (!locations[loc]) {
+                    locations[loc] = [];
                 }
-                
-                if (activity && activity !== '-') {
-                    html += '<div class="data-row">';
-                    html += '<div class="data-label">Activitate</div>';
-                    html += '<div class="data-value">' + activity + '</div>';
-                    html += '</div>';
-                }
-                
-                if (action && action !== '-') {
-                    html += '<div class="data-row">';
-                    html += '<div class="data-label">Acțiune</div>';
-                    html += '<div class="data-value">' + action + '</div>';
-                    html += '</div>';
-                }
-                
-                html += '</div>';
-            }
-        });
-    });
-    
-    if (html === '') {
-        html = '<div class="empty-state">Nu există date pentru perioada selectată</div>';
-    }
-    
-    section.innerHTML = html;
-    badge.textContent = totalEntries;
-}
-
-function displayGroupsSection(data) {
-    var section = document.getElementById('groupsSection');
-    var badge = document.getElementById('groupsBadge');
-    
-    // Grupare pe punct de lucru
-    var locations = {};
-    data.forEach(function(row) {
-        var loc = row['Punct de lucru'];
-        if (!locations[loc]) {
-            locations[loc] = [];
-        }
-        locations[loc].push(row);
-    });
-    
-    var html = '';
-    var totalEntries = 0;
-    
-    Object.keys(locations).forEach(function(loc) {
-        var rows = locations[loc];
-        rows.forEach(function(row) {
-            var team = row['Grupe de marfa atinse de echipa'] || '-';
-            var individual = row['Grupe de marfa atinse individual'] || '-';
+                locations[loc].push(row);
+            });
             
-            if (team !== '-' || individual !== '-') {
-                totalEntries++;
-                html += '<div class="location-item">';
-                html += '<div class="location-header">';
-                html += '<span class="location-icon">📍</span>';
-                html += '<span>' + loc + '</span>';
-                html += '<span class="location-date">' + row.Timestamp + '</span>';
-                html += '</div>';
-                
-                html += '<div class="data-row">';
-                html += '<div class="data-label">Echipă</div>';
-                html += '<div class="data-value">' + team + '</div>';
-                html += '</div>';
-                
-                html += '<div class="data-row">';
-                html += '<div class="data-label">Individual</div>';
-                html += '<div class="data-value">' + individual + '</div>';
-                html += '</div>';
-                
-                html += '</div>';
-            }
-        });
-    });
-    
-    if (html === '') {
-        html = '<div class="empty-state">Nu există date pentru perioada selectată</div>';
-    }
-    
-    section.innerHTML = html;
-    badge.textContent = totalEntries;
-}
-    </script>
-</body>
-</html>
+            var html = '';
+            var totalEntries = 0;
+            
+            Object.keys(locations).forEach(function(loc) {
+                var rows = locations[loc];
+                rows.forEach(function(row) {
+                    var orders = row[ordersColumn] || '';
+                    
+                    if (orders && orders.trim() !== '' && orders !== '-') {
+                        totalEntries++;
+                        html
