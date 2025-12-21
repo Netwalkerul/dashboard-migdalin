@@ -267,7 +267,7 @@
                 </div>
             </div>
             
-            <button class="refresh-btn" onclick="loadData()">Incarca Date</button>
+            <button class="refresh-btn" id="loadBtn">Incarca Date</button>
         </div>
 
         <div id="loading" class="loading hidden">
@@ -364,6 +364,11 @@
         var visitsChart = null;
         var deliveriesChart = null;
         var newClientsChart = null;
+
+        // Atașăm event listener după ce documentul s-a încărcat
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loadBtn').addEventListener('click', loadData);
+        });
 
         function showError(msg) {
             var el = document.getElementById('error');
