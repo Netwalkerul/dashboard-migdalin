@@ -317,6 +317,36 @@
             <p id="errorMessage"></p>
         </div>
 
+<div id="supportSection" class="hidden" style="margin-bottom: 15px;">
+            <div class="text-section">
+                <div class="text-section-header" onclick="toggleSection('supportMainSection')">
+                    <div class="text-section-title">
+                        <span>🆘</span>
+                        <span>Suport solicitat</span>
+                        <span class="text-section-badge" id="supportTotalBadge">0</span>
+                    </div>
+                    <span class="text-section-icon expanded" id="supportMainIcon">▼</span>
+                </div>
+                <div class="text-section-content expanded" id="supportMainSection">
+                    <!-- Solicitări recente (ultimele 2 zile) - auto-expandate -->
+                    <div id="recentSupport" style="border-bottom: 2px solid #e5e7eb;"></div>
+                    
+                    <!-- Restul solicitărilor (ultimele 5 zile) - collapsible -->
+                    <div id="olderSupportContainer" class="hidden">
+                        <div class="text-section-header" onclick="toggleSection('olderSupportSection')" style="background: #f8f9fa; color: #333;">
+                            <div class="text-section-title" style="font-size: 16px;">
+                                <span>📋</span>
+                                <span>Restul solicitărilor (ultimele 5 zile)</span>
+                                <span class="text-section-badge" id="olderSupportBadge" style="background: #667eea; color: white;">0</span>
+                            </div>
+                            <span class="text-section-icon" id="olderSupportIcon" style="color: #667eea;">▼</span>
+                        </div>
+                        <div class="text-section-content" id="olderSupportSection"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="stats" class="stats-grid hidden"></div>
 
         <div id="charts" class="hidden">
@@ -528,6 +558,7 @@ function loadData() {
                 displayStats(data);
                 displayCharts(data);
 				displayTextSections(data);
+				displaySupportSection();
 
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('stats').classList.remove('hidden');
@@ -931,6 +962,121 @@ function displayTextSections(data) {
     
     document.getElementById('textSections').classList.remove('hidden');
 }
+
+function displaySupportSection() {
+    var url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSStmY7B2gI5oLQgyP9_d5QcWyStm2gHLScEzQokGOf3K6GDtQ4uPKM9acuzzoZB8KiF-w4aA_RAwgP/pub?output=csv';
+    
+    Papa.parse(url, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            var now = new Date();
+            var twoDaysAgo = new Date(now.getTime() - (2 * 24 * 60 * 60 * 1000));
+            var fiveDaysAgo = new Date(now.getTime() - (5 * 24 * 60 * 60 * 1000));
+            
+            // Căutăm coloana pentru suport
+            var supportColumn = null;
+            if (results.data.length > 0) {
+                var columns = Object.keys(results.data[0]);
+                supportColumn = columns.find(function(col) {
+                    return col.toLowerCase().includes('solicit suport');
+                });
+            }
+            
+            if (!supportColumn) return;
+            
+            // Filtrăm și sortăm datele
+            var recentRequests = [];
+            var olderRequests = [];
+            
+            results.data.forEach(function(row) {
+                if (!row.Timestamp || !row['Punct de lucru']) return;
+                
+                var support = (row[supportColumn] || '').trim();
+                if (!support || support === '-') return;
+                
+                var rowDate = parseDate(row.Timestamp);
+                if (!rowDate) return;
+                
+                var requestData = {
+                    location: row['Punct de lucru'],
+                    timestamp: row.Timestamp,
+                    support: support,
+                    date: rowDate
+                };
+                
+                if (rowDate >= twoDaysAgo) {
+                    recentRequests.push(requestData);
+                } else if (rowDate >= fiveDaysAgo) {
+                    olderRequests.push(requestData);
+                }
+            });
+            
+            // Sortare descrescătoare (cea mai nouă sus)
+            recentRequests.sort(function(a, b) { return b.date - a.date; });
+            olderRequests.sort(function(a, b) { return b.date - a.date; });
+            
+            var totalRequests = recentRequests.length + olderRequests.length;
+            
+            // Dacă nu există solicitări, ascundem complet secțiunea
+            if (totalRequests === 0) {
+                document.getElementById('supportSection').classList.add('hidden');
+                return;
+            }
+            
+            // Afișăm secțiunea
+            document.getElementById('supportSection').classList.remove('hidden');
+            document.getElementById('supportTotalBadge').textContent = totalRequests;
+            
+            // Afișăm solicitările recente
+            var recentHtml = '';
+            if (recentRequests.length > 0) {
+                recentHtml += '<div style="padding: 15px 20px; background: #fff3cd; border-bottom: 2px solid #ffc107;">';
+                recentHtml += '<div style="font-weight: 600; color: #856404; margin-bottom: 10px;">📢 Solicitări recente (ultimele 2 zile)</div>';
+                recentHtml += '</div>';
+                
+                recentRequests.forEach(function(req) {
+                    recentHtml += '<div class="location-item">';
+                    recentHtml += '<div class="location-header">';
+                    recentHtml += '<span class="location-icon">📍</span>';
+                    recentHtml += '<span>' + req.location + '</span>';
+                    recentHtml += '<span class="location-date">' + req.timestamp + '</span>';
+                    recentHtml += '</div>';
+                    recentHtml += '<div class="data-row" style="background: #fff9e6;">';
+                    recentHtml += '<div class="data-value">' + req.support + '</div>';
+                    recentHtml += '</div>';
+                    recentHtml += '</div>';
+                });
+            }
+            document.getElementById('recentSupport').innerHTML = recentHtml;
+            
+            // Afișăm solicitările mai vechi (collapsible)
+            if (olderRequests.length > 0) {
+                document.getElementById('olderSupportContainer').classList.remove('hidden');
+                document.getElementById('olderSupportBadge').textContent = olderRequests.length;
+                
+                var olderHtml = '';
+                olderRequests.forEach(function(req) {
+                    olderHtml += '<div class="location-item">';
+                    olderHtml += '<div class="location-header">';
+                    olderHtml += '<span class="location-icon">📍</span>';
+                    olderHtml += '<span>' + req.location + '</span>';
+                    olderHtml += '<span class="location-date">' + req.timestamp + '</span>';
+                    olderHtml += '</div>';
+                    olderHtml += '<div class="data-row">';
+                    olderHtml += '<div class="data-value">' + req.support + '</div>';
+                    olderHtml += '</div>';
+                    olderHtml += '</div>';
+                });
+                document.getElementById('olderSupportSection').innerHTML = olderHtml;
+            } else {
+                document.getElementById('olderSupportContainer').classList.add('hidden');
+            }
+        }
+    });
+}
+
 function displayOrdersSection(data) {
     var section = document.getElementById('ordersSection');
     var badge = document.getElementById('ordersBadge');
